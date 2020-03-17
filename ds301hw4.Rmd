@@ -1,0 +1,120 @@
+---
+title: "Appendix"
+author: "Mikaela Blount"
+date: "3/5/2020"
+output: html_document
+---
+
+Problem 1:
+```{r}
+insurance = read.csv("~/Downloads/insurance.csv")
+```
+
+a)
+```{r}
+str(insurance)
+```
+
+b)
+```{r}
+fit = lm(charges ~ age+bmi+gender+gender:age+gender:bmi, data = insurance)
+summary(fit)
+```
+
+c)
+Males: predicted charges = -8012.791 + 238.632(age) + 409.869(bmi)
+Females: predicted charges = -4515.219 + 246.919(age) + 241.319(bmi)
+
+d)
+```{r}
+library(dplyr)
+
+male = insurance %>%
+  filter(gender == "male")
+
+fit_males = lm(charges ~ age+bmi, data = male)
+summary(fit_males)
+
+female = insurance %>%
+  filter(gender == "female")
+
+fit_females = lm(charges ~ age+bmi, data = female)
+summary(fit_females)
+
+```
+
+e)
+They are the same regression coefficent estimates indicating that predicted charges will be the same.
+
+f)
+
+
+g)
+
+
+h) 
+
+
+i)
+```{r}
+names(insurance)
+
+predCharges = data.frame(age = 10, gender = "male", bmi = 13)
+
+predict(fit, predCharges)
+```
+
+j)
+```{r}
+summary(insurance$age)
+summary(insurance$bmi)
+```
+
+Since the individual in part (i) is outside the ranges for both age and bmi, there will be a problem with extrapolation. Extrapolation is volatile 
+
+
+Problem 2:
+```{r}
+saHeart <- read.delim2("~/Downloads/SAheart.txt",header = TRUE, sep = ",")
+saHeart$ldl = as.numeric(saHeart$ldl)
+str(saHeart)
+```
+
+
+a)
+```{r}
+logit.fit = glm(chd~ldl+famhist+age, data = saHeart)
+summary(logit.fit)
+```
+
+b)
+
+
+
+c)
+```{r}
+head(predict(logit.fit),n = 10)
+```
+
+d)
+```{r}
+p_hat = predict(logit.fit, type = "response")
+
+n = dim(saHeart)[1]
+pred_labels = rep(0,n)
+pred_labels[p_hat > 0.5] = 1
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
