@@ -88,6 +88,14 @@ summary(logit.fit)
 ```
 
 b)
+Resisdual deviance: 84.609
+Null deviance: 104.589
+
+(X^2 is chi-square)
+H0: X^2 = 0
+HA: X^2 ≠ 0
+
+
 
 
 c)
