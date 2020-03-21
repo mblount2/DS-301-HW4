@@ -50,10 +50,10 @@ f)
 
 
 g)
-
+The biggest advantage in using the model from part (b) is the simplicity of interpretting the model. The model from part (b) can be used for both males and females and to see how gender affects the mean of Y with one equation. The classmate's approach will give you the same results but it involves two seperate equations for the two genders.
 
 h) 
-
+At least one of the predictors is correlated with the response variable, but they do not explain much of the variability in the response variable. R-square measures the variability around the regression line so having a significant F-test statistic indicates at least one of the predictors is a significant predictor of health care charges but there is much variability around the regression line.
 
 i)
 ```{r}
@@ -70,7 +70,7 @@ summary(insurance$age)
 summary(insurance$bmi)
 ```
 
-Since the individual in part (i) is outside the ranges for both age and bmi, there will be a problem with extrapolation. Extrapolation is volatile 
+Since the individual in part (i) is outside the ranges for both age and bmi, there will be a problem with extrapolation. Extrapolation is volatile because we do not have data to support the prediction because in this case, the individual is 5 years younger and has a smaller bmi than anyone in the dataset. This is especially a problem in this model because health care charges will never be less than zero (the hospital will never owe the patient money for health care procedures), but the results show the hospital owes the individual -$298.16.   
 
 
 Problem 2:
@@ -90,7 +90,6 @@ summary(logit.fit)
 b)
 
 
-
 c)
 ```{r}
 head(predict(logit.fit),n = 10)
@@ -104,8 +103,63 @@ n = dim(saHeart)[1]
 pred_labels = rep(0,n)
 pred_labels[p_hat > 0.5] = 1
 
+table1 = table(pred_labels,saHeart$chd) 
+table1
+1-mean(pred_labels == saHeart$chd)
 
+true_neg = table1[1,1]/sum(table1[,1])
+true_neg
+true_pos = table1[2,2]/sum(table1[,2])
+true_pos
+
+false_neg = table1[1,2]/sum(table1[,2])
+false_neg
+false_pos = table1[2,1]/sum(table1[,1])
+false_pos
+
+true_neg + true_pos
 ```
+
+e)
+```{r}
+set.seed(3)
+
+n2 = dim(saHeart)[1]
+index = sample(1:n2,n2/2,replace = FALSE)
+
+train_saHeart = saHeart[index,]
+test_saHeart = saHeart[-index,]
+
+logit.train = glm(chd~ldl+famhist+age, data = train_saHeart)
+summary(logit.train)
+```
+
+
+f)
+```{r}
+p_hat_test = predict(logit.train,test_saHeart,type = "response")
+
+n2 = dim(test_saHeart)[1]
+pred_labels2 = rep(0,n2)
+pred_labels2[p_hat_test > 0.5] = 1
+
+table2 = table(pred_labels2,test_saHeart$chd) 
+table2
+
+1-mean(pred_labels2 == test_saHeart$chd)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
