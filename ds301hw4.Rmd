@@ -14,6 +14,7 @@ a)
 ```{r}
 str(insurance)
 ```
+All predictors are stored correctly.
 
 b)
 ```{r}
@@ -47,7 +48,7 @@ e)
 They are the same regression coefficent estimates indicating that predicted charges will be the same.
 
 f)
-
+It is not possible because in the subsetted data, you lose gender as a predictor. When gender is loss as a predictor, you cannot test whether it is significant or not because it is no longer in the model.
 
 g)
 The biggest advantage in using the model from part (b) is the simplicity of interpretting the model. The model from part (b) can be used for both males and females and to see how gender affects the mean of Y with one equation. The classmate's approach will give you the same results but it involves two seperate equations for the two genders.
@@ -77,26 +78,38 @@ Problem 2:
 ```{r}
 saHeart <- read.delim2("~/Downloads/SAheart.txt",header = TRUE, sep = ",")
 saHeart$ldl = as.numeric(saHeart$ldl)
+saHeart$tobacco = as.numeric(saHeart$tobacco)
 str(saHeart)
 ```
 
 
 a)
 ```{r}
-logit.fit = glm(chd~ldl+famhist+age, data = saHeart)
+logit.fit = glm(chd~tobacco+ldl+famhist+age, data = saHeart)
 summary(logit.fit)
 ```
 
 b)
-Resisdual deviance: 84.609
-Null deviance: 104.589
+```{r}
+D_star = logit.fit$null.deviance - logit.fit$deviance
 
-(X^2 is chi-square)
-H0: X^2 = 0
-HA: X^2 ≠ 0
+# compute p-value
+p = 4
+df = p - 1
+pchisq(D_star,df,lower.tail=FALSE)
+```
 
+Resisdual deviance: 82.89  on 457  degrees of freedom
+Null deviance: 104.59  on 461  degrees of freedom
 
+H0: B1 = B2 = B3 = B4 = 0
+HA: At least one of the Bj's is not equal to 0
 
+Test Statistic: D0 - D = 104.59 - 82.89 = 21.7
+
+Null Distribution: Chi-square distribution with 3 degrees of freedom
+
+We reject the null hypothesis in favor of the alternative hypothesis that chi-square does not equal zero because our p-value of 7.537321e-05 is smaller than any reasonable alpha.
 
 c)
 ```{r}
@@ -112,21 +125,32 @@ pred_labels = rep(0,n)
 pred_labels[p_hat > 0.5] = 1
 
 table1 = table(pred_labels,saHeart$chd) 
-table1
-1-mean(pred_labels == saHeart$chd)
+misRate = 1-mean(pred_labels == saHeart$chd)
+corRate = 1-misRate
+
 
 true_neg = table1[1,1]/sum(table1[,1])
-true_neg
+
 true_pos = table1[2,2]/sum(table1[,2])
-true_pos
 
 false_neg = table1[1,2]/sum(table1[,2])
-false_neg
-false_pos = table1[2,1]/sum(table1[,1])
-false_pos
 
-true_neg + true_pos
+false_pos = table1[2,1]/sum(table1[,1])
+
+table1
+corRate
+true_neg
+true_pos
+misRate
+false_neg
+false_pos
 ```
+Correct classification: 0.7294372
+True neg: 0.8543046
+True pos: 0.49375
+Misclassifaction rate: 0.2705628
+False neg: 0.50625
+False pos: 0.1456954
 
 e)
 ```{r}
@@ -157,7 +181,7 @@ table2
 1-mean(pred_labels2 == test_saHeart$chd)
 ```
 
-
+The overall misclassification rate is 32.46753%. This is a slightly higher misclassification rate compared to part (d) of 27.05628% but only by 5.41125% difference.  
 
 
 
