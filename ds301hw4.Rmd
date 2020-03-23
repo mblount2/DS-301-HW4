@@ -109,7 +109,7 @@ Test Statistic: D0 - D = 104.59 - 82.89 = 21.7
 
 Null Distribution: Chi-square distribution with 3 degrees of freedom
 
-We reject the null hypothesis in favor of the alternative hypothesis that chi-square does not equal zero because our p-value of 7.537321e-05 is smaller than any reasonable alpha.
+We reject the null hypothesis in favor of the alternative hypothesis that at least one of the predictors is significant because our p-value of 7.537321e-05 is smaller than any reasonable alpha.
 
 c)
 ```{r}
